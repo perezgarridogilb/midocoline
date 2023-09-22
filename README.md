@@ -9,7 +9,7 @@
 
 ## About
 
-- Clinical record
+- Registros clínicos
 
 | Método  | Ruta                            | Controlador y Método       | Descripción                 |
 |---------|---------------------------------|----------------------------|-----------------------------|
@@ -19,12 +19,96 @@
 | PUT     | /v1/medical-records             | MedicalRecordService@update| Actualizar su registro      |
 | DELETE  | /v1/medical-records/{id}        | MedicalRecordService@destroy| Eliminar un registro específico |
 
-- Login and Register
+- Estructura de métodos de escritura
 
-| Método | Ruta                  | Controlador Método             |
-|--------|-----------------------|--------------------------------|
-| POST   | /api/login            | App\Http\Controllers\Api\LoginController@login |
-| POST   | /api/register         | App\Http\Controllers\Api\LoginController@register |
+#### Crear un nuevo registro (POST)
+
+Este endpoint te permite crear un nuevo registro clínico.
+
+##### URL
+- **Método:** POST
+- **URI:** `/v1/medical-records`
+
+##### Encabezados
+- **Accept:** application/json
+- **Authorization:** Bearer 2|iCQHkzTEnzDlLb1BKYHBXZ1zqGCfxIorAy7qkWbZ
+  - Nota: Agregar la palabra "Bearer" seguida de un espacio y luego el token.
+
+##### Cuerpo (JSON)
+```json
+{
+    "lugar_nacimiento": "North Gillianville",
+    "sexo": "F",
+    "edad": 24,
+    "tipo_sangre": "AB-",
+    "peso": 77.76,
+    "estatura": 177,
+    "alergias": "Pruebas"
+}
+```
+
+#### Actualizar su registro (PUT)
+
+Este endpoint te permite actualizar tu registro médico existente. El sistema identifica automáticamente tu expediente clínico, por lo que no es necesario incluir un identificador (ID).
+
+##### URL
+- **Método:** PUT
+- **URI:** `/v1/medical-records`
+
+##### Encabezados
+- **Accept:** application/json
+- **Authorization:** Bearer 2|iCQHkzTEnzDlLb1BKYHBXZ1zqGCfxIorAy7qkWbZ
+  - Nota: Agregar la palabra "Bearer" seguida de un espacio y luego el token.
+
+##### Cuerpo (JSON)
+```json
+{
+    "lugar_nacimiento": "Testing12PruebasPut1",
+    "sexo": "F",
+    "edad": 23,
+    "tipo_sangre": "AB-",
+    "peso": 80.76,
+    "estatura": 165,
+    "alergias": "PruebasPruebas1"
+}
+```
+
+- Login, Logout and Register (Titular)
+
+| Método | URI                     | Controlador                    | Descripción                |
+|--------|-------------------------|--------------------------------|----------------------------|
+| POST   | /auth/login             | LoginController@login           | Iniciar sesión             |
+| POST   | /auth/register          | LoginController@register        | Registrar usuario          |
+| POST   | /auth/logout            | LoginController@logout (con autenticación Sanctum) | Cerrar sesión   |
+
+- Estructura de métodos de escritura
+
+#### Iniciar Sesión (POST)
+
+Este endpoint te permite iniciar sesión en la aplicación.
+
+##### URL
+- **Método:** POST
+- **URI:** `/api/auth/login`
+
+##### Encabezados
+- **Accept:** application/json
+
+##### Cuerpo (form-data)
+- **email:** hilbert.bailey@example.org
+- **password:** password
+- **name:** Nombre del dispositivo (ejemplo: iPhone, Smart Watch, etc.)
+
+##### Respuesta Exitosa
+- **Código:** 202 Accepted
+- **Contenido:**
+```json
+{
+    "Status": "Success",
+    "Message": "El usuario inició sesión",
+    "Token": "TOKEN_GENERADO"
+}
+```
 
 ## Security Vulnerabilities
 
