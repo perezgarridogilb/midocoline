@@ -20,5 +20,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
+// V1
 Route::apiResource('v1/medical-records', api1::class)
-->only(['index','show', 'destroy']); // Servicio web para actualizar expediente clínico
+->only(['index','show', 'store', 'destroy']) // Servicio web para actualizar expediente clínico
+->middleware('auth:sanctum');
+
+Route::post('login', [
+    App\Http\Controllers\Api\LoginController::class, 'login'
+]);

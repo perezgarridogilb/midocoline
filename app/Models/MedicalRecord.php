@@ -10,7 +10,7 @@ class MedicalRecord extends Model
     use HasFactory;
     // En el modelo de Expediente Médico (MedicalRecords)
 
-    protected $fillable = ['peso', 'estatura'];
+    protected $fillable = ['lugar_nacimiento', 'sexo', 'edad', 'tipo_sangre', 'peso', 'estatura', 'alergias', 'user_id'];
 
     public function setPesoAttribute($value)
     {
