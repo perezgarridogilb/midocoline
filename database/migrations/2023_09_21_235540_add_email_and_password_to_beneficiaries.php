@@ -15,6 +15,8 @@ class AddEmailAndPasswordToBeneficiaries extends Migration
         Schema::table('beneficiaries', function (Blueprint $table) {
             $table->string('email')->unique()->after('relationship'); // Campo para el correo electrónico
             $table->string('password')->after('email'); // Campo para la contraseña
+            $table->rememberToken()->after('password');
+
         });
     }
 
