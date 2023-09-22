@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class MedicalRecordFactory extends Factory
 {
     /**
-     * Define the model's default state.
+     * Registro clinico factory
      *
      * @return array
      */

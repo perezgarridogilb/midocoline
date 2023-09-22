@@ -4,15 +4,15 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class MedicalRecordSeeder extends Seeder
+class BeneficiariesTableSeeder extends Seeder
 {
     /**
-     * Registros clinicos seeder
+     * Beneficiarios seeder
      *
      * @return void
      */
     public function run()
     {
-        \App\Models\MedicalRecord::factory(10)->create();
+        \App\Models\Beneficiary::factory(10)->create();
     }
 }

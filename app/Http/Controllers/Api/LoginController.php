@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Response;
-
+use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
@@ -18,18 +18,21 @@ class LoginController extends Controller
      * @param Request $request
      * @return void
      */
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         $this->validateLogin($request);
-        
+
         if (Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
-                'token' => $request->user()->createToken($request->name)->plainTextToken,
-                'message' => 'Success'
+                'Status' => 'Success',
+                'Message' => 'El usuario inició sesión',
+                'Token' => $request->user()->createToken($request->name)->plainTextToken
             ],  Response::HTTP_ACCEPTED);
         }
 
         return response()->json([
-            'message' => 'Unauthorized'
+            'Status' => 'Error',
+            'Message' => 'Acceso no autorizado. Por favor, inicie sesión para continuar.',
         ], Response::HTTP_UNAUTHORIZED);
     }
 
@@ -39,7 +42,8 @@ class LoginController extends Controller
      * @param Request $request
      * @return void
      */
-    public function validateLogin(Request $request) {
+    public function validateLogin(Request $request)
+    {
         return $request->validate([
             'email' => 'required|email',
             'password' => 'required',
@@ -53,24 +57,55 @@ class LoginController extends Controller
      * @param Request $request
      * @return void
      */
-    public function register(Request $request) {
+    public function register(Request $request)
+    {
         // Validar los datos de registro
-        $request->validate([
+        $validation = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|min:3',
         ]);
-    
+
+        // Verificar si la validacion falla
+        if ($validation->fails()) {
+            return response()->json([
+                'Status' => 'Error',
+                'Message' => 'Error correspondiente a la validación',
+                'Errors' => $validation->errors(),
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
         // Crear un nuevo usuario
         $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
         ]);
-    
+
         return response()->json([
             'Status' => 'Success',
             'Message' => 'Usuario registrado con éxito',
         ], Response::HTTP_CREATED);
+    }
+
+    /**
+     * Cerrar la sesión del usuario autenticado
+     *
+     * @return void
+     */
+    public function logout(Request $request)
+    {
+        try {
+            $request->user()->tokens()->delete(); // Revoca todos los tokens del usuario
+            return response()->json([
+                'Status' => 'Success',
+                'Message' => 'Sesión cerrada correctamente.',
+            ], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                'Status' => 'Error',
+                'Message' => 'Error al cerrar la sesión',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }
