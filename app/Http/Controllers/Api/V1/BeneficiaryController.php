@@ -11,16 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 class BeneficiaryController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Funcion para crear beneficiario asociado al titular
      * con sus expedientes clinicos independientes
      *
@@ -82,29 +72,19 @@ class BeneficiaryController extends Controller
         $userId = $user->id;
         // Obtener los beneficiarios asociados al usuario
         $beneficiaries = Beneficiary::where('primary_user_id', $user->id)->get();
-    
+
 
         if ($beneficiaries->isEmpty()) {
             return response()->json([
                 'Status' => 'Error',
-                'Message' => 'No se encontraron beneficiarios asociados a este usuario'], 404);
+                'Message' => 'No se encontraron beneficiarios asociados a este usuario'
+            ], Response::HTTP_NOT_FOUND);
         }
-    
+
         return response()->json([
             'Status' => 'Success',
-            'Beneficiaries' => $beneficiaries], 200);
-    }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\MedicalRecord  $medicalRecord
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, MedicalRecord $medicalRecord)
-    {
-        //
+            'Beneficiaries' => $beneficiaries
+        ], Response::HTTP_OK);
     }
 
     /**
