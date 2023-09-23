@@ -17,9 +17,22 @@ class MedicalRecordController1 extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        return MedicalRecordResource::collection(MedicalRecord::latest()->paginate());
+        $medicalRecord = MedicalRecord::find($id);
+        // Verificar si el expediente clínico existe
+        if (!$medicalRecord) {
+            return response()->json([
+                'Status' => 'Error',
+                'Message' => 'Expediente clínico no encontrado'
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        return response()->json([
+            'Status' => 'Success',
+            'Message' => 'Expediente clínico encontrado satisfactoriamente',
+            'data' => new MedicalRecordResource($medicalRecord),
+        ], Response::HTTP_ACCEPTED);
     }
 
     /**
@@ -87,22 +100,20 @@ class MedicalRecordController1 extends Controller
      * @param  \App\Models\MedicalRecord  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        $medicalRecord = MedicalRecord::find($id);
-        // Verificar si el expediente clínico existe
-        if (!$medicalRecord) {
-            return response()->json([
-                'Status' => 'Error',
-                'Message' => 'Expediente clínico no encontrado'
-            ], Response::HTTP_NOT_FOUND);
+        $user = $request->user(); // Obtener el usuario autenticado
+        $userId = $user->id; // Obtener el ID del usuario
+        try {
+            $medicalRecords = MedicalRecord::where('user_id', $userId)
+                ->latest()
+                ->get();
+    
+            return $medicalRecords;
+        } catch (\Exception $e) {
+            // Manejar el error y devolver una respuesta personalizada
+            return response()->json(['message' => 'Hubo un error al obtener los registros médicos.'], 500);
         }
-
-        return response()->json([
-            'Status' => 'Success',
-            'Message' => 'Expediente clínico encontrado satisfactoriamente',
-            'data' => new MedicalRecordResource($medicalRecord),
-        ], Response::HTTP_ACCEPTED);
     }
 
     /**

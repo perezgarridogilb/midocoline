@@ -81,7 +81,7 @@ Este endpoint te permite crear un nuevo registro clínico.
 
 ##### Encabezados
 - **Accept:** application/json
-- **Authorization:** {tu_token_de_autenticación}
+- **Authorization:** Bearer {tu_token_de_autenticación}
   - Nota: Agregar la palabra "Bearer" seguida de un espacio y luego el token.
 
 ##### Cuerpo (JSON)
@@ -107,7 +107,7 @@ Este endpoint te permite actualizar tu registro médico existente. El sistema id
 
 ##### Encabezados
 - **Accept:** application/json
-- **Authorization:** {tu_token_de_autenticación}
+- **Authorization:** Bearer {tu_token_de_autenticación}
   - Nota: Agregar la palabra "Bearer" seguida de un espacio y luego el token.
 
 ##### Cuerpo (JSON)
