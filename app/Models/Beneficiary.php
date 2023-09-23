@@ -14,6 +14,6 @@ class Beneficiary extends Model
         'relationship',
         'email',
         'password',
-        'primary_user_id', 
+        'primary_user_id',
     ];
 }

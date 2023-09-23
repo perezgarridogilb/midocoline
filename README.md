@@ -67,7 +67,7 @@ Este endpoint te permite registrar un usuario titular que puede registrar benefi
 | GET     | /v1/medical-records/{id}        | MedicalRecordService@index | Mostrar un registro específico |
 | POST    | /v1/medical-records             | MedicalRecordService@store | Crear un nuevo registro     |
 | PUT     | /v1/medical-records             | MedicalRecordService@update| Actualizar su registro      |
-| DELETE  | /v1/medical-records/{id}        | MedicalRecordService@destroy| Eliminar un registro específico |
+| DELETE  | /v1/medical-records/{id}        | MedicalRecordService@destroy| Eliminar su registro |
 
 - Estructura de métodos de escritura
 
@@ -152,6 +152,12 @@ Cada vez que se actualice el peso o la estatura de un expediente médico, el IMC
 ```
 
 - Registrar beneficiarios, Eliminar beneficiarios, Crear expediente clínico para reflejarse como adicional (Titular)
+
+| Método | URI                                | Controlador y Método           | Descripción                          |
+|--------|------------------------------------|--------------------------------|--------------------------------------|
+| POST   | `/v1/beneficiaries`               | `BeneficiaryController@store`  | Crear un beneficiario asociado al titular |
+| GET    | `/v1/beneficiaries`               | `BeneficiaryController@show`   | Listar todos los beneficiarios        |
+| DELETE | `/v1/beneficiaries/{id}`          | `BeneficiaryController@destroy`| Eliminar un beneficiario específico   |
 
 ## License
 

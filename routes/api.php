@@ -17,10 +17,14 @@ Route::prefix('v1/medical-records')->middleware('auth:sanctum')->group(function 
     Route::post('/', [MedicalRecordService::class, 'store']); // Crear un nuevo registro
     Route::put('/', [MedicalRecordService::class, 'update']); // Actualizar su registro 
     Route::delete('/', [MedicalRecordService::class, 'destroy']); // Eliminar su registro
-    Route::post('/beneficiaries', [BeneficiaryController::class, 'store']); // Crear un beneficiario asociado al titular
 });
 
 
+Route::prefix('v1/beneficiaries')->middleware('auth:sanctum')->group(function () {
+    Route::post('/', [BeneficiaryController::class, 'store']); // Crear un beneficiario asociado al titular
+    Route::get('/', [BeneficiaryController::class, 'show']); // Listar todos los beneficiarios
+    Route::delete('/{id}', [BeneficiaryController::class, 'destroy']); // Eliminar un beneficiario
+});
 
 // Authentication Routes
 Route::group(['prefix' => 'auth'], function () {

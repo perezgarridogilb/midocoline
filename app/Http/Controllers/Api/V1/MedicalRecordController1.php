@@ -169,7 +169,7 @@ class MedicalRecordController1 extends Controller
     {
         $user = $request->user(); // Obtener el usuario autenticado
         $userId = $user->id; // Obtener el ID del usuario
-        
+
         $medicalRecord = MedicalRecord::where('user_id', $userId)->first();
 
         if (!$medicalRecord) {
