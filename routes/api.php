@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\LoginController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\V1\BeneficiaryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\MedicalRecordController1 as MedicalRecordService;
@@ -16,13 +17,14 @@ Route::prefix('v1/medical-records')->middleware('auth:sanctum')->group(function 
     Route::post('/', [MedicalRecordService::class, 'store']); // Crear un nuevo registro
     Route::put('/', [MedicalRecordService::class, 'update']); // Actualizar su registro 
     Route::delete('/{id}', [MedicalRecordService::class, 'destroy']); // Eliminar un registro específico
+    Route::post('/beneficiaries', [BeneficiaryController::class, 'store']); // Crear un beneficiario asociado al titular
 });
 
 
 
 // Authentication Routes
 Route::group(['prefix' => 'auth'], function () {
-    Route::post('login', [LoginController::class, 'login']); // Login
-    Route::post('register', [LoginController::class, 'register']); // Register
-    Route::middleware(['auth:sanctum'])->post('logout', [LoginController::class, 'logout']);
+    Route::post('login', [AuthController::class, 'login']); // Login
+    Route::post('register', [AuthController::class, 'register']); // Register
+    Route::middleware(['auth:sanctum'])->post('logout', [AuthController::class, 'logout']);
 });

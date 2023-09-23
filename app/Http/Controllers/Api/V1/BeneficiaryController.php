@@ -21,13 +21,17 @@ class BeneficiaryController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Funcion para crear beneficiario asociado al titular
+     * con sus expedientes clinicos independientes
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
+        $user = $request->user(); // Obtener el usuario autenticado
+        $userId = $user->id; // Obtener el ID del usuario
+
         // Validar los datos de entrada
         $validatedData = $request->validate([
             'beneficiary_name' => 'required|string',
@@ -35,6 +39,8 @@ class BeneficiaryController extends Controller
             'email' => 'required|string|email|unique:beneficiaries',
             'password' => 'required|string|min:6',
         ]);
+
+        $validatedData['primary_user_id'] = $userId;
     
         // Crear un nuevo Beneficiary con los datos validados
         $beneficiary = Beneficiary::create($validatedData);
@@ -84,8 +90,44 @@ class BeneficiaryController extends Controller
      * @param  \App\Models\MedicalRecord  $medicalRecord
      * @return \Illuminate\Http\Response
      */
-    public function destroy(MedicalRecord $medicalRecord)
+    public function destroy(Beneficiary $beneficiary)
     {
-        //
+        // Verificar si el beneficiario existe
+        if (!$beneficiary) {
+            return response()->json([
+                'Status' => 'Error',
+                'Message' => 'Beneficiary no encontrado',
+            ], Response::HTTP_NOT_FOUND);
+        }
+    
+        // Verificar si el usuario autenticado tiene permiso para eliminar el beneficiario
+        $user = auth()->user();
+    
+        if ($beneficiary->primary_user_id !== $user->id) {
+            return response()->json([
+                'Status' => 'Error',
+                'Message' => 'No tienes permiso para eliminar este beneficiario',
+            ], Response::HTTP_FORBIDDEN);
+        }
+    
+        // Obtener los registros médicos relacionados con este beneficiario
+        $medicalRecords = MedicalRecord::where('beneficiary_id', $beneficiary->id)->get();
+    
+        /**
+         * Eliminar los registros médicos relacionados en cascada
+         * a grandes rasgos sólo se necesita uno, pero se
+         * mantiene la lógica antes de refactorizar
+         */
+        foreach ($medicalRecords as $medicalRecord) {
+            $medicalRecord->delete();
+        }
+    
+        // Eliminar el beneficiario
+        $beneficiary->delete();
+    
+        return response()->json([
+            'Status' => 'Success',
+            'Message' => 'Beneficiary y registros médicos relacionados eliminados correctamente',
+        ], Response::HTTP_OK);
     }
 }

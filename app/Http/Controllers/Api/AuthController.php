@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
-class LoginController extends Controller
+class AuthController extends Controller
 {
     /**
      * Funcion de inicio de sesion

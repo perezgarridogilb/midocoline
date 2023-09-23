@@ -18,7 +18,12 @@ class AddUserIdToMedicalRecords extends Migration
             $table->foreign('beneficiary_id')
                 ->references('id')
                 ->on('beneficiaries')
-                ->onDelete('cascade'); // Opcional: si deseas eliminar en cascada cuando se elimine un beneficiario
+                /**
+                 * Eliminar automáticamente los registros relacionados 
+                 * en la tabla medical_records cuando se elimine 
+                 * un beneficiario en la tabla beneficiaries. 
+                 */
+                ->onDelete('cascade');
         });
     }
 
