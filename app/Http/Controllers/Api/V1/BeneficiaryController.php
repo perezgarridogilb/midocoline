@@ -49,13 +49,13 @@ class BeneficiaryController extends Controller
         if ($beneficiary) {
             return response()->json([
                 'Status' => 'Success',
-                'Message' => 'Beneficiary creado satisfactoriamente',
+                'Message' => 'Beneficiario creado satisfactoriamente',
                 'data' => $beneficiary,
             ], Response::HTTP_CREATED);
         } else {
             return response()->json([
                 'Status' => 'Error',
-                'Message' => 'No se pudo crear el Beneficiary',
+                'Message' => 'No se pudo crear el Beneficiario',
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -96,7 +96,7 @@ class BeneficiaryController extends Controller
         if (!$beneficiary) {
             return response()->json([
                 'Status' => 'Error',
-                'Message' => 'Beneficiary no encontrado',
+                'Message' => 'Beneficiario no encontrado',
             ], Response::HTTP_NOT_FOUND);
         }
     
@@ -127,7 +127,7 @@ class BeneficiaryController extends Controller
     
         return response()->json([
             'Status' => 'Success',
-            'Message' => 'Beneficiary y registros médicos relacionados eliminados correctamente',
+            'Message' => 'Beneficiario y registros médicos relacionados eliminados correctamente',
         ], Response::HTTP_OK);
     }
 }
